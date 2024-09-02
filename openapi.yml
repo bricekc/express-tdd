@@ -1,0 +1,257 @@
+openapi: 3.1.0
+info:
+  title: API Game-score
+  description: .
+  version: 0.0.1
+
+servers:
+- url: http://localhost:7777
+  description: Serveur de développement
+
+tags:
+  - name: hello
+    description: première API avec Express
+  - name: player
+    description: API player
+  - name: game
+    description: une partie de jeu
+      
+paths:
+  /api/hello/world:
+    get:
+      tags:
+        - hello
+      description: message de bienvenue
+      responses:
+        200:
+          description: retourne un message de bienvenue
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hello'
+  /api/hello/square/{number}:
+    get:
+      parameters:
+        - in: path
+          name: number
+          schema:
+            type: integer
+          required: true
+          description: Number to square
+      tags:
+        - hello
+      responses:
+        200:
+          description: retourne le carré du paramètre
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Hello'
+  /api/hello:
+      get:
+        tags:
+          - hello
+        responses:
+          200:
+            description: retourne la collection de hello
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Hello'
+      post:
+        tags:
+          - hello
+        parameters:
+          - in: body
+            name: message
+            schema:
+              type: string
+            required: true
+        responses:
+          201:
+            description: retourne et créer la collection de hello
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Hello'
+          400:
+            description: retourne une erreur si le message n'est pas une string ou s'il est vide
+  /api/hello/{id}:
+      get:
+        tags:
+          - hello
+        parameters:
+          - in: path
+            name: id
+            schema:
+              type: string
+            required: true
+        responses:
+          200:
+            description: retourne un objet hello en fonction de son id
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Hello'
+          404:
+            description: retourne une erreur si l'id n'existe pas
+      delete:
+        tags:
+          - hello
+        parameters:
+          - in: path
+            name: id
+            schema:
+              type: string
+            required: true
+        responses:
+          204:
+            description: supprime un objet hello en fonction de son id
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Hello'
+          404:
+            description: retourne une erreur si l'id n'existe pas
+  /api/player:
+      get:
+        tags:
+          - player
+        parameters:
+          - in: query
+            name: country
+            schema:
+              type: string
+          - in: query
+            name: lastName
+            schema:
+              type: string
+          - in: query
+            name: tour
+            schema:
+              type: string
+        responses:
+          200:
+            description: retourne la collection de player
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Player'
+  /api/player/{id}:
+        get:
+          tags:
+            - player
+          parameters:
+            - in: path
+              name: id
+              schema:
+                type: string
+              required: true
+          responses:
+            200:
+              description: retourne un objet player en fonction de son id
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Player'
+            404:
+              description: retourne une erreur si l'id n'existe pas
+        post:
+          tags:
+            - player
+          parameters:
+            - in: body
+              name: country
+              schema:
+                type: string
+            - in: body
+              name: lastName
+              schema:
+                type: string
+            - in: body
+              name: tour
+              schema:
+                type: string
+            - in: body
+              name: firstName
+              schema:
+                type: string
+          responses:
+            201:
+              description: retourne et créer la collection de player
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Player'
+            400:
+              description: retourne une erreur si les paramètres ne sont pas du bon types
+        delete:
+          tags:
+            - player
+          parameters:
+            - in: path
+              name: id
+              schema:
+                type: string
+              required: true
+          responses:
+            204:
+              description: supprime un objet player en fonction de son id
+              content:
+                application/json:
+                  schema:
+                    $ref: '#/components/schemas/Player'
+            404:
+              description: retourne une erreur si l'id n'existe pas
+  /api/game:
+      get:
+        tags:
+          - game
+        responses:
+          200:
+            description: retourne la collection de game
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Game'
+components:
+  schemas:
+    Hello:
+      type: object
+      properties:
+        message:
+          type: string
+      additionalProperties: false
+      required:
+        - message
+    Player:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        tour:
+          type: string
+        country:
+          type: string
+      additionalProperties: false
+      required:
+        - firstName
+        - lastName
+        - tour
+        - country
+    Game:
+      type: object
+      properties:
+        players:
+          type: object
+        config:
+          type: object
+        state:
+          type: object
+      additionalProperties: false
+      required:
+        - players
+        - config
+        - state
